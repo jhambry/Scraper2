@@ -1,0 +1,139 @@
+<nav>
+    <div class="nav-wrapper">
+        <a href="/" class="brand-logo">NPR News Scraper</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/scrape">Scraped Articles</a></li>
+            <li>
+              <a href="http://www.npr.org/sections/news/" target="blank"><img id="logo" src="images/logo.gif" alt="nprLogo"></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<main>
+   {{!-- PARALLAX CONTAINER SCROLLING EFFECT --}}
+  <div class="parallax-container">
+    <div class="parallax"><img src="../public/images/news.jpg"></div>
+      <br>
+      <br>
+    <div class="row right">
+     <h1 class="header grey-text text-lighten-2">NPR News Scraper</h1>
+     <h5 class="header col s12 light grey-text center">Get the latest news articles from NPR.org</h5>
+    </div>
+  </div>  
+
+    {{!-- SAVED ARTICLES BANNER --}}
+    <div class="row center">
+      <ul class="collection">
+        {{#if savedArticle}}
+          <li class="collection-item grey white-text"><h4>Your saved articles.</h4></li>
+        {{/if}}
+        {{#unless savedArticle}}
+          <li class="collection-item grey white-text"><h4>You don't have any saved articles.</h4></li>
+        {{/unless}}
+      </ul>
+    </div>
+
+    <div class="container">
+       <div class="row">
+         {{#each savedArticle}}
+           <div class="col l4">
+             <div class="card hoverable">
+               {{!-- IMAGE HERE --}}
+               <div class="card-image">
+                 <a class="articleLink" href={{this.link}} target="blank"><img src="{{this.imgLink}}"></a>
+               </div>
+               {{!-- TITLE, ADD NOTE, READ NOTE, DELETE ARTICLE --}}
+               <div class="card-content" style="padding: 0;">
+                 <ul class="collapsible" data-collapsible="accordion">
+                    <!-- DROP DOWN MENU WITH ARTICLES -->
+                    <li>
+                      <div style="background-color: white;" class="collapsible-header grey lighten-2">
+                        <div style="clear: left; line-height: 110%; padding-bottom: 10px; padding-top: 10px;"><span><i class="material-icons" style="font-size:36px; line-height: 1.6rem;">expand_more</i><b>{{this.title}}</b></span></div>
+                      </div>
+                      <div class="collapsible-body" style="background-color: white;">
+                        <p>
+                          {{this.teaser}}
+
+                          <br><br>
+
+                          <i>You can read the full article <a href="{{link}}" target="_new">here</a>.</i>
+                        </p>                        
+                      </div>
+                    </li>
+                    <!-- DROP DOWN FOR ADDING COMMENTS -->
+                    <li>
+                      <div class="collapsible-header">Add a Note</div>
+                        <div class="collapsible-body" style="background-color: white;">
+                            <form id="form-add-{{this.id}}" action="/articles/{{this.id}}" method="post" style="background-color: white;">
+                              <!--  TITLE GOES HERE -->
+                              <div class="row">
+                                <div class="input-field col s12">
+                                  <input id="noteTitle" name="title" type="text" class="validate">
+                                  <label for="author_name">Note Title:</label>
+                                </div>
+                              </div>                              
+                              <!--COMMENT GOES HERE-->
+                              <div class="row">
+                                <div class="input-field col s12">
+                                  <textarea id="noteBody" name="body" class="materialize-textarea"></textarea>
+                                  <label for="comment_box">Your Note:</label>
+                                </div>
+                              </div>
+                              <!-- SUBMIT BUTTON -->
+                              <div class="row">
+                                <div class="input-field col s12">
+                                <center><input class="btn add-comment-button" id="note" data-id="{{this.id}}" type="submit" value="Submit"></center>
+                                </div>
+                              </div>                              
+                            </form>
+                      </div>
+                    </li>
+                    <!-- DROP DOWN TO VIEW COMMENTS-->
+                    <li>
+                      <div class="collapsible-header" id="note">View Notes</div>
+                        <div class="collapsible-body" style="background-color: white;">                        
+                          {{!-- ARTICLE WITH NOTE --}}
+                          {{#if this.note}}
+                            {{!-- ITERATES OVER NOTES  --}}
+                            <ul class="collection">
+                              {{#each this.note}}                              
+                                <li class="collection-item">
+                                  {{!-- NOTE TITLE --}}
+                                  <h5>{{this.title}}</h5>
+                                  {{!-- NOTE CONTENT --}}
+                                  <p>{{this.body}}</p>                
+                                  {{!-- DELETE BUTTON --}}
+                                  <span class="badge">
+                                    <form id="form-delete-{{this.id}}" action="/delete/notes/{{this.id}}?_method=DELETE" method="POST">
+                                      <input class="btn-small delete-comment-button" id="deleteNote" data-id="{{this.id}}" type="submit" value="Delete" style="color: white; background-color: black; border-color: grey;">
+                                    </form>
+                                  </span>
+                                  <br>
+                                </li> 
+                              {{/each}}
+                            </ul>                         
+                          {{!-- NO CURRENT NOTES AVAILABLE--}}
+                          {{else}}
+                            <p>There are no current notes for this article</p>
+                          {{/if}}                          
+                        </div>
+                    </li>
+                    {{!-- DELETE BUTTON FOR ARTICLE --}}
+                    <li>
+                      <div class="collapsible-header" id="delete" data-id="{{this.id}}">Delete Article</a></div>
+                    </li>
+                </ul>
+             </div>
+          </div>
+         </div>
+        {{/each}}
+      </div>
+   </div>
+</main>
+
+<footer class="page-footer black">
+    <div class="copyright black-text center">
+        All content featured on this app and copyright belongs to NPR News. 
+    </div>
+</footer>

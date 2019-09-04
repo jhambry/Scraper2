@@ -1,0 +1,61 @@
+<nav>
+    <div class="nav-wrapper">
+        <a href="/" class="brand-logo">NPR News Scraper</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/scrape" id="scrape" class="btn-large waves-effect waves-light red lighten-1">Scrape Articles</a></li>
+            <li><a href="/articles" id="savedArcticles">Saved Articles</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main>
+   {{!-- PARALLAX CONTAINER SCROLLING EFFECT --}}
+  <div class="parallax-container">
+    <div class="parallax"><img src="images/news.jpg"></div>
+      <br>
+      <br>
+    <div class="row right">
+     <h1 class="header grey-text text-lighten-2">NPR News Scraper</h1>
+     <h5 class="header col s12 light grey-text center">Get the latest news articles from NPR.org</h5>
+    </div>
+  </div>  
+
+  {{!-- BANNER SCRAPE AND NUMBER SCRAPED --}}
+  <div class="row center">
+       <ul class="collection">
+          {{#unless this.num}}
+             <li class="collection-item grey lighten-1 black-text"><h4>Scrape NPR articles by pressing the Scrape button.</h4></li>
+          {{/unless}}                  
+          {{#if this.num}}             
+              <li class="collection-item red lighten-1 white-text"><h4>You have scraped {{this.num}} articles.</h4></li>
+          {{/if}}
+      </ul>
+  </div>
+  {{!-- CONTAINER FOR ARTICLES --}}
+  <div class="container">
+    <div class="row">
+    {{#each articles}}
+      <div class="col l4">
+        <div class="card hoverable index">
+          <div class="card-image">
+            <a class="articleLink" href={{this.link}} target="blank"><img src="{{this.imgLink}}"></a>
+          </div>
+          <div class="card-content">
+          <h5>{{this.title}}</h5>
+            <p>{{this.teaser}}</p>
+          </div>
+          <div class="card-action center">
+            <a class="btn black" id="save" data-imglink="{{this.imgLink}}" data-title="{{this.title}}" data-link="{{this.link}}" data-teaser="{{this.teaser}}">Save Article</a>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+    </div>
+  </div>
+</main>
+
+<footer class="page-footer black">
+    <div class="copyright black-text center">
+        All content featured on this app and copyright belongs to NPR News. 
+    </div>
+</footer>
